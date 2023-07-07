@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { patients } from '../assets/data'
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import Receipt from './Receipt';
+import { useSelector } from 'react-redux';
 
 function Payments() {
   const [patient,setPatient] = useState(null);
   const [total,setTotal] = useState(0)
   const [bill,setBill] = useState([]);
   const [generateBill,setGenerateBill]= useState(false)
-
+  const user = useSelector((state)=>state.currentUser);
   useEffect(()=>{
     var valueZ = patients.find((obj)=>obj.name === patient);
    setBill(valueZ?.bill);
@@ -21,6 +22,8 @@ function Payments() {
   
   return (
     <div className='flex items-center flex-col justify-center'>
+    {user.role =='reception' && <>
+    
       <div className='flex gap-3 flex-col items-center'>
         <label htmlFor="patient" className='text-semibold text-3xl'>Patient name</label>
         <select name="" onChange={(e)=>setPatient(e.target.value) } className='p-2' id="patient">
@@ -66,6 +69,8 @@ function Payments() {
             </div>
             {generateBill && <Receipt setGenerateBill={setGenerateBill} person={{bill:bill,patient:patient,total:total}} />}
             <div>{patient?.name}</div>
+    
+     </>}
             <div className=' w-full'>
               <span className='font-bold text-lg underline'>Todays bills</span>
               <Table className='w-full h-2/3 overflow-scroll'>

@@ -11,7 +11,7 @@ function Profile() {
     })
 
     
-    console.log(time)
+    
   return (
     <div className='flex flex-col gap-10'>
         <div className='flex justify-between items-center border-b-2'>

@@ -1,0 +1,7 @@
+.search:focus + .searchResult{
+
+    visibility: hidden;
+}
+.search:focus ~ .searchResult{
+   visibility: visible;
+}

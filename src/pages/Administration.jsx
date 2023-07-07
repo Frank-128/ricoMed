@@ -1,9 +1,9 @@
-import { Dashboard, Message, Notifications, Payment, People, Person4, Search } from "@mui/icons-material";
+import { Dashboard, Memory, Message, Notifications, Payment, People, PeopleAltOutlined, Person4, Search } from "@mui/icons-material";
 import { Badge } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
-function Receptionist() {
+function Administration() {
     const [active,setActive] = useState("dashboard")
     const  location = useLocation();
     useEffect(()=>{
@@ -57,27 +57,37 @@ function Receptionist() {
       <main className="flex basis-11/12 ">
         <section className="basis-1/5 p-5  bg-slate-50">
           <ul className="flex flex-col gap-4">
-            <Link to="/reception">
+            <Link to="/admin">
               <li className={`flex items-center  ${active==="dashboard"?'bg-blue-900 text-gray-200':'text-gray-700'}  p-2 rounded justify-center gap-3`}>
                 <Dashboard /> <b> DashBoard</b>
               </li>
             </Link>
-            <Link to="/reception/staff">
+            <Link to="/admin/users">
+              <li className={`flex items-center  ${active==="users"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
+                <PeopleAltOutlined /> <b> Users</b>
+              </li>
+            </Link>
+            <Link to="/admin/staff">
               <li className={`flex items-center  ${active==="staff"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
                 <People /> <b> Staff</b>
               </li>
             </Link>
-            <Link to="/reception/patients">
+            <Link to="/admin/patients">
               <li className={`flex items-center  ${active==="patients"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
                 <Person4 /> <b> Patients</b>
               </li>
             </Link>
-            <Link to="/reception/payments">
+            <Link to="/admin/logs">
+              <li className={`flex items-center  ${active==="logs"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
+                <Memory /> <b> Logs</b>
+              </li>
+            </Link>
+            <Link to="/admin/payments">
               <li className={`flex items-center  ${active==="payments"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
                 <Payment /> <b> Payments</b>
               </li>
             </Link>
-            <Link to="/reception/messages">
+            <Link to="/admin/messages">
               <li className={`flex items-center  ${active==="messages"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
                 <Message /> <b> Messages</b>
               </li>
@@ -92,4 +102,4 @@ function Receptionist() {
   );
 }
 
-export default Receptionist;
+export default Administration;

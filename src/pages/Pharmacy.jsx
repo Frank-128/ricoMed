@@ -1,9 +1,9 @@
-import { Dashboard, Message, Notifications, Payment, People, Person4, Search } from "@mui/icons-material";
+import { Dashboard, List, Message, Notifications, Payment, People, Person4, PieChart, Search, Storage, Timer } from "@mui/icons-material";
 import { Badge } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
-function Receptionist() {
+function Pharmacy() {
     const [active,setActive] = useState("dashboard")
     const  location = useLocation();
     useEffect(()=>{
@@ -20,10 +20,10 @@ function Receptionist() {
         
     },[location])
 
-   console.log(active) 
+   
   return (
     <div className="w-screen h-screen overflow-y-scroll flex flex-col font-mono">
-      <nav className="bg-gray-200 flex z-50 justify-between p-2 basis-1/12 sticky top-0 left-0">
+      <nav className="bg-gray-200 flex justify-between p-2 z-50 basis-1/12 sticky top-0 left-0">
         <div>
           <img
             src="/ricoMed.jpg"
@@ -48,7 +48,7 @@ function Receptionist() {
             <Notifications />
           </Badge>
           <img
-            src="/olivia.webp"
+            src="/ghost.webp"
             className="w-14 h-14 rounded-full object-cover outline outline-cyan-800 outline-offset-1"
             alt="profile pic"
           />
@@ -57,27 +57,23 @@ function Receptionist() {
       <main className="flex basis-11/12 ">
         <section className="basis-1/5 p-5  bg-slate-50">
           <ul className="flex flex-col gap-4">
-            <Link to="/reception">
+            <Link to="/pharmacy">
               <li className={`flex items-center  ${active==="dashboard"?'bg-blue-900 text-gray-200':'text-gray-700'}  p-2 rounded justify-center gap-3`}>
                 <Dashboard /> <b> DashBoard</b>
               </li>
             </Link>
-            <Link to="/reception/staff">
-              <li className={`flex items-center  ${active==="staff"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
-                <People /> <b> Staff</b>
+            
+            <Link to="/pharmacy/orders">
+              <li className={`flex items-center  ${active==="orders"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
+                <List /> <b>Pharmacy Orders</b>
               </li>
             </Link>
-            <Link to="/reception/patients">
-              <li className={`flex items-center  ${active==="patients"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
-                <Person4 /> <b> Patients</b>
+            <Link to="/pharmacy/inventory">
+              <li className={`flex items-center  ${active==="inventory"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
+                <PieChart /> <b> Inventory</b>
               </li>
             </Link>
-            <Link to="/reception/payments">
-              <li className={`flex items-center  ${active==="payments"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
-                <Payment /> <b> Payments</b>
-              </li>
-            </Link>
-            <Link to="/reception/messages">
+            <Link to="/pharmacy/messages">
               <li className={`flex items-center  ${active==="messages"?'bg-blue-900 text-gray-200':'text-gray-700'} p-2 rounded justify-center gap-3`}>
                 <Message /> <b> Messages</b>
               </li>
@@ -92,4 +88,4 @@ function Receptionist() {
   );
 }
 
-export default Receptionist;
+export default Pharmacy;
