@@ -288,6 +288,8 @@ export const users = [
     pic: "/swift.jpeg",
     department: "outpatient",
     role: "nurse",
+    status:true,
+    createdAt:"2023-11-2 12:11:1"
   },
   {
     id: 2,
@@ -295,6 +297,8 @@ export const users = [
     department: "reception",
     pic: "/olivia.webp",
     role: "reception",
+    status:false,
+    createdAt:"2023-11-2 12:11:1"
   },
   {
     id: 3,
@@ -302,6 +306,8 @@ export const users = [
     department: "outpatient",
     pic: "/ghost.webp",
     role: "doctor",
+    status:false,
+    createdAt:"2023-11-2 12:11:1"
   },
   {
     id: 4,
@@ -309,6 +315,8 @@ export const users = [
     department: "inpatient",
     pic: "/kendrick.jpeg",
     role: "doctor",
+    status:true,
+    createdAt:"2023-11-2 12:11:1"
   },
 
   {
@@ -317,6 +325,8 @@ export const users = [
     department: "general ",
     pic: "/kendrick.jpeg",
     role: "admin",
+    status:true,
+    createdAt:"2023-11-2 12:11:1"
   },
   {
     id: 6,
@@ -324,6 +334,8 @@ export const users = [
     department: "pharmarcy",
     pic: "/kendrick.jpeg",
     role: "pharmacy",
+    status:false,
+    createdAt:"2023-11-2 12:11:1"
   },
 ];
 

@@ -71,8 +71,8 @@ function App() {
             <Route element={<Profile />} path="/nurse/staff/:id" />
             <Route element={<Nurses />} path="/nurse/staff/nurses" />
             <Route element={<Doctors />} path="/nurse/staff/doctors" />
-            <Route element={<Patients />} path="/nurse/patients" />
-            <Route element={<PatientProfile />} path="/nurse/patients/:id" />
+            <Route element={<Patients />} path="/nurse/patients/*" />
+            {/* <Route element={<PatientProfile />} path="/nurse/patients/:id" /> */}
             <Route element={<NurseSchedule />} path="/nurse/schedule" />
             <Route element={<Messages />} path="/nurse/messages" />
           </Route>
@@ -83,7 +83,7 @@ function App() {
             <Route element={<Staff />} path="/doctor/staff" />
             <Route element={<Profile />} path="/doctor/staff/:id" />
             <Route element={<Doctors />} path="/doctor/staff/doctors" />
-            <Route element={<Patients />} path="/doctor/patients" />
+            <Route element={<Patients />} path="/doctor/patients/*" />
             <Route element={<PatientProfile />} path="/doctor/patients/:id" />
             <Route element={<NurseSchedule />} path="/doctor/schedule" />
             <Route element={<Messages />} path="/doctor/messages" />
@@ -109,8 +109,7 @@ function App() {
             <Route element={<Doctors />} path="/admin/staff/doctors" />
             <Route element={<Nurses />} path="/admin/staff/nurses" />
             <Route element={<Inventory />} path="/admin/inventory" />
-            <Route element={<Patients />} path="/admin/patients" />
-            <Route element={<PatientProfile />} path="/admin/patients/:id" />
+            <Route element={<Patients />} path="/admin/patients/*" />
             <Route element={<Payments />} path="/admin/payments" />
             <Route element={<Messages />} path="/admin/messages" />
           </Route>

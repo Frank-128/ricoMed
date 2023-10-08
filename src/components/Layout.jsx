@@ -217,7 +217,7 @@ function Layout({ children }) {
               <li
                 className={`flex items-center  ${
                   active === "dashboard"
-                    ? "bg-blue-900 text-gray-200"
+                    ? "bg-purple-500 text-gray-200"
                     : "text-gray-700"
                 }  p-2 rounded justify-center gap-3`}
               >
@@ -229,7 +229,7 @@ function Layout({ children }) {
                 <li
                   className={`flex items-center  ${
                     active === "users"
-                      ? "bg-blue-900 text-gray-200"
+                      ? "bg-purple-500 text-gray-200"
                       : "text-gray-700"
                   } p-2 rounded justify-center gap-3`}
                 >
@@ -243,7 +243,7 @@ function Layout({ children }) {
                   <li
                     className={`flex items-center  ${
                       active === "staff"
-                        ? "bg-blue-900 text-gray-200"
+                        ? "bg-purple-500 text-gray-200"
                         : "text-gray-700"
                     } p-2 rounded justify-center gap-3`}
                   >
@@ -255,7 +255,7 @@ function Layout({ children }) {
               <li
                 className={`flex items-center  ${
                   active === "patients"
-                    ? "bg-blue-900 text-gray-200"
+                    ? "bg-purple-500 text-gray-200"
                     : "text-gray-700"
                 } p-2 rounded justify-center gap-3`}
               >
@@ -269,7 +269,7 @@ function Layout({ children }) {
                 <li
                   className={`flex items-center  ${
                     active === "inventory"
-                      ? "bg-blue-900 text-gray-200"
+                      ? "bg-purple-500 text-gray-200"
                       : "text-gray-700"
                   } p-2 rounded justify-center gap-3`}
                 >
@@ -282,7 +282,7 @@ function Layout({ children }) {
                 <li
                   className={`flex items-center  ${
                     active === "logs"
-                      ? "bg-blue-900 text-gray-200"
+                      ? "bg-purple-500 text-gray-200"
                       : "text-gray-700"
                   } p-2 rounded justify-center gap-3`}
                 >
@@ -295,7 +295,7 @@ function Layout({ children }) {
                 <li
                   className={`flex items-center  ${
                     active === "orders"
-                      ? "bg-blue-900 text-gray-200"
+                      ? "bg-purple-500 text-gray-200"
                       : "text-gray-700"
                   } p-2 rounded justify-center gap-3`}
                 >
@@ -308,7 +308,7 @@ function Layout({ children }) {
                 <li
                   className={`flex items-center  ${
                     active === "payments"
-                      ? "bg-blue-900 text-gray-200"
+                      ? "bg-purple-500 text-gray-200"
                       : "text-gray-700"
                   } p-2 rounded justify-center gap-3`}
                 >
@@ -321,7 +321,7 @@ function Layout({ children }) {
                 <li
                   className={`flex items-center  ${
                     active === "schedule"
-                      ? "bg-blue-900 text-gray-200"
+                      ? "bg-purple-500 text-gray-200"
                       : "text-gray-700"
                   } p-2 rounded justify-center gap-3`}
                 >
@@ -333,7 +333,7 @@ function Layout({ children }) {
               <li
                 className={`flex items-center  ${
                   active === "messages"
-                    ? "bg-blue-900 text-gray-200"
+                    ? "bg-purple-500 text-gray-200"
                     : "text-gray-700"
                 } p-2 rounded justify-center gap-3`}
               >

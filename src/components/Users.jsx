@@ -16,20 +16,25 @@ function Users() {
         </div>
         <Table>
             <TableHead>
-                <TableRow className='bg-slate-300'>
+                <TableRow className='bg-gray-400 border-b-[0.4px]'>
                     <TableCell>ID</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell>Department</TableCell>
                     <TableCell>Role</TableCell>
+                    <TableCell>Status</TableCell>
+                    <TableCell>Created At</TableCell>
                     
                 </TableRow>
             </TableHead>
             <TableBody>
-                {users.map((item,i)=><TableRow key={i} className={i%2==0?'bg-slate-100':'bg-slate-200'}>
+                {users.map((item,i)=><TableRow key={i} className={i%2==0?'bg-gray-100':'bg-gray-200'}>
                     <TableCell >{item.id}</TableCell>
                     <TableCell ><span onClick={()=>{setOpenForm(true);setType(2)}} className='hover:text-blue-900 cursor-pointer'>{item.name}</span></TableCell>
                     <TableCell>{item.department}</TableCell>
                     <TableCell>{item.role}</TableCell>
+                    <TableCell>{item.status? <span className='p-2 bg-green-500 rounded text-white'>online</span>:<span className='p-2 text-white bg-red-500 rounded'>offline</span>}</TableCell>
+                    <TableCell>{item.createdAt}</TableCell>
+
                 </TableRow>)}
             </TableBody>
         </Table>

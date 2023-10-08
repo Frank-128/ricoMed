@@ -8,28 +8,28 @@ function ChatHead({ user, handleClick,setChatPerson }) {
   return (
     <div
       onClick={() => {handleClick(user.id,user.name);}}
-      className="flex gap-3 items-center cursor-pointer bg-yellow-50 p-2 rounded-md"
+      className="flex gap-3 items-center cursor-pointer shadow-md bg-white p-2 rounded-md"
     >
       <img
         src={user.pic}
-        className="h-20 w-20 object-cover rounded-full"
+        className="h-14 w-14 object-cover rounded-full"
         alt="avatar"
       />
       <div className="flex flex-col">
-        <span className="font-bold sm:text-sm md:text-2xl">{user.name}</span>
+        <span className=" sm:text-sm md:text-lg">{user.name}</span>
       </div>
     </div>
   );
 }
 function GroupHead({ group,handleClick,setChatPerson }) {
   return (
-    <div onClick={()=>{handleClick(group.id,group.name);}} className="flex gap-10 items-center cursor-pointer bg-yellow-50 p-2 rounded-md">
+    <div onClick={()=>{handleClick(group.id,group.name);}} className="flex gap-10 items-center cursor-pointer shadow-lg bg-white p-2 rounded-md">
       <Person2
         color="action"
         sx={{
           backgroundColor: group.color,
-          height: "80px",
-          width: "80px",
+          height: "40px",
+          width: "40px",
           borderRadius: "50%",
         }}
       />
@@ -77,7 +77,7 @@ function Messages() {
   ];
   return (
     <div className="overflow-y-scroll w-full   flex h-full">
-      <div className="bg-zinc-200    basis-2/6">
+      <div className="bg-gray-100   w-full md:basis-2/6">
         <div className="flex justify-around">
           <Button onClick={()=>{setChatType(false);setChatPerson("")}}>Inbox</Button>
           <Button onClick={()=>{setChatType(true);setChatPerson("")}}>Group</Button>
@@ -93,7 +93,7 @@ function Messages() {
             ))} 
         </div>
       </div>
-      <div className="basis-5/6 flex p-10 flex-col h-full gap-3  bg-zinc-300">
+      <div className="basis-5/6 md:flex hidden p-10 flex-col h-full gap-3  bg-gray-200">
                 <div className="flex items-center font-bold justify-center sticky rounded bg-zinc-400 p-4">{chatPerson}</div>
         { !chatType?conversations
           .filter(
