@@ -951,3 +951,31 @@ export const pharmarcyOrders = [
 
   
 ];
+
+
+export const services = [
+  {
+    title:"Inpatient service",
+    image:"/nurse1.webp",
+    message:"We at RicoMed provide the best Inpatient service we provide good care to our inpatient and our charges and costs are friendly"
+
+  },
+  {
+    title:"Consultation service",
+    image:"/nurse2.avif",
+    message:"We at RicoMed provide the best Consultation service, our consultation and counselling experts are higly trained and they provide the best solution for you"
+
+  },
+  {
+    title:"Patient care",
+    image:"/nurse3.jpg",
+    message:"At RicoMed our primary motto is providing the best patient care, every staff at RicoMed is highly motivated and inspired to provide the best health care for both children,youth and the eldery"
+
+  },
+  {
+    title:"Patient diagnosis",
+    image:"/doctor2.jpg",
+    message:"RicoMed has the best facilities which aid in the diagnosis process of the patients, thus at RicoMed we have a wide scope of diagnosing due to the best facilities we have"
+
+  }
+]

@@ -67,6 +67,7 @@ function App() {
           <Route element={<Nurse />} path="/nurse">
             <Route element={<Dashboard />} path="/nurse" />
             <Route element={<Staff />} path="/nurse/staff" />
+            <Route element={<Inventory />} path="/nurse/inventory" />
             <Route element={<Profile />} path="/nurse/staff/:id" />
             <Route element={<Nurses />} path="/nurse/staff/nurses" />
             <Route element={<Doctors />} path="/nurse/staff/doctors" />
@@ -107,7 +108,7 @@ function App() {
             <Route element={<Profile />} path="/admin/staff/:id" />
             <Route element={<Doctors />} path="/admin/staff/doctors" />
             <Route element={<Nurses />} path="/admin/staff/nurses" />
-            <Route element={<Inventory />} path="/admin/staff/inventory" />
+            <Route element={<Inventory />} path="/admin/inventory" />
             <Route element={<Patients />} path="/admin/patients" />
             <Route element={<PatientProfile />} path="/admin/patients/:id" />
             <Route element={<Payments />} path="/admin/payments" />
