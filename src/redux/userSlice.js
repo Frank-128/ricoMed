@@ -1,11 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+
+const checkAndFetchUser = ()=>{
+  try{ const res =  Cookies.get('authenticatedUser')
+  const loggedUser = JSON.parse(res)
+   if (res){
+        console.log(loggedUser)
+
+       return loggedUser.user
+   }
+   return ""
+}catch(err){
+    console.log(err)
+   }
+}
 
 const userSlice= createSlice({
     name:'user',
     initialState:{
-        currentUser:'',
+        currentUser:checkAndFetchUser(),
         isLoading:'',
         error:false
 
@@ -23,7 +38,7 @@ const userSlice= createSlice({
                  
                 Swal.fire({
                     icon:'success',
-                    title:state.currentUser.name,
+                    title:state.currentUser.username,
                     text:'Login successfully!',
                     timer:1500
                 })

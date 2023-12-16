@@ -3,7 +3,8 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 function Staff() {
-  const user = useSelector((state)=>state.currentUser);
+  const user = useSelector((state)=>state.user.currentUser);
+  console.log(user)
   return (
     <div className='flex justify-around items-center h-full'>
       

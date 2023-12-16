@@ -1,22 +1,29 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { conversations, groupConv, users } from "../assets/data";
-import { Person2 } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import {  groupConv,  } from "../assets/data";
+import { Person2, Send } from "@mui/icons-material";
+import { Button, TextField } from "@mui/material";
+import { useEffect,useMemo } from "react";
+import { axios } from "../axios";
+import { Input } from "@material-tailwind/react";
+import Pusher from 'pusher-js';
+import Cookies from "js-cookie";
 
 function ChatHead({ user, handleClick,setChatPerson }) {
+
+  
   return (
     <div
-      onClick={() => {handleClick(user.id,user.name);}}
+      onClick={() => {handleClick(user.id,user.username);}}
       className="flex gap-3 items-center cursor-pointer shadow-md bg-white p-2 rounded-md"
     >
       <img
-        src={user.pic}
+        src={'http://localhost:8000'+user.pic}
         className="h-14 w-14 object-cover rounded-full"
         alt="avatar"
       />
       <div className="flex flex-col">
-        <span className=" sm:text-sm md:text-lg">{user.name}</span>
+        <span className=" sm:text-sm md:text-lg">{user.username}</span>
       </div>
     </div>
   );
@@ -43,6 +50,10 @@ function Messages() {
   const [receiverId, setReceiverId] = useState();
   const [chatPerson,setChatPerson] = useState('');
   const [chatType,setChatType]= useState(false);
+  const [message,setMessage] = useState();
+  const [conversations,setConversations] = useState([])
+  const [users,setUsers] = useState([])
+  const [onlineUsers,setOnlineUsers] = useState([])
 
   const handleClick = (val,name) => {
     setReceiverId(val);
@@ -75,6 +86,80 @@ function Messages() {
       color: "violet",
     },
   ];
+
+  const handleSendMessage = async(messageObj)=>{
+    console.log(messageObj)
+    console.log(id)
+    await axios.post('/message/chat',messageObj).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  console.log(`private-chat-${Math.min(id, receiverId)}-${Math.max(id, receiverId)}`)
+
+  useEffect(()=>{
+    (
+      async ()=>{
+        await axios.get('/accounts/user').then((res)=>{
+          setUsers(res.data)
+        }).catch((err)=>{
+          console.log(err)
+        })
+        await axios.get('/message/chat').then((res)=>{
+          setConversations(res.data)
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
+    )()
+   
+  },[])
+const token = Cookies.get("authenticatedUser")
+const access = JSON.parse(token).access
+console.log(access)
+
+
+useEffect(()=>{
+  const socket = new WebSocket(`ws://localhost:8000/ws/user_presence/?token=${access}`);
+
+  socket.onopen = () => {
+    console.log('WebSocket connection open');
+    // socket.send(JSON.stringify({ type: 'subscribe' }));
+    socket.send(JSON.stringify({type:'join'}))
+  };
+
+  // Handle received messages
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+   
+    if (data.type === 'update_online_users') {
+      setOnlineUsers(data.online_users);
+      console.log("new data",data.online_users)
+    }
+    else {
+      console.log(data)
+    }
+  };
+
+  // Handle connection closed
+  socket.onclose = () => {
+    console.log('WebSocket closed');
+    // socket.send(JSON.stringify({'type':'disconnect'}))
+  };
+
+  // Clean up on component unmount
+  return () => {
+    socket.close();
+  };
+
+    
+
+},[access])
+
+console.log(onlineUsers)
+
   return (
     <div className="overflow-y-scroll w-full   flex h-full">
       <div className="bg-gray-100   w-full md:basis-2/6">
@@ -93,7 +178,7 @@ function Messages() {
             ))} 
         </div>
       </div>
-      <div className="basis-5/6 md:flex hidden p-10 flex-col h-full gap-3  bg-gray-200">
+      <div className="basis-5/6 md:flex relative hidden p-10 flex-col min-h-4/5 max-h-5/6 gap-3  bg-gray-200">
                 <div className="flex items-center font-bold justify-center sticky rounded bg-zinc-400 p-4">{chatPerson}</div>
         { !chatType?conversations
           .filter(
@@ -114,9 +199,15 @@ function Messages() {
                 item.sender === id
                   ? "self-end p-2 font-bold bg-blue-100 rounded"
                   : "self-start p-2 bg-blue-100 font-bold rounded"
-              }>{item.timeSent}</span>
+              }>{item.created_at}</span>
             </div>
           )):groupConv.filter((item)=>item.group === chatPerson).map((item)=><div>{item.message}</div>)}
+          <div className="w-4/5 gap-x-5 items-center absolute bottom-3 p-2 flex justify-between">
+            <Input label="Message" className="p-2  bg-gray-50 rounded" onChange={(e)=>setMessage(e.target.value)} />
+            <span className="cursor-pointer" onClick={()=>handleSendMessage({sender:id,receiver:receiverId,message})}>
+              <Send/>
+            </span>
+          </div>
       </div>
     </div>
   );

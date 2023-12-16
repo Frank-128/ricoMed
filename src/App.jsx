@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import Receptionist from "./pages/Receptionist";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -25,28 +25,18 @@ import Users from "./components/Users";
 import Logs from "./components/Logs";
 import PharmacyOrders from "./components/PharmacyOrders";
 import Pharmacy from "./pages/Pharmacy";
+import { axios } from "./axios";
 function App() {
-  const user = useSelector((state) => state.currentUser);
-  const [loggedUser, setLoggedUser] = useState(null);
-  const handleUnsigned = () => {
-    Swal.fire({
-      icon: "error",
-      title: "Unathorized",
-      text: "You are not logged in",
-    });
-    return <Route element={<Home />} path="/" />;
-  };
-
-  useEffect(() => {
-    setLoggedUser(user);
-  }, [user]);
-  console.log(loggedUser);
+  const user = useSelector((state) => state.user.currentUser);
+ 
+  
+  console.log(user)
   return (
     <BrowserRouter>
       <Routes>
         
         <Route element={<Login />} path="/login" />
-        {loggedUser?.role === "reception" && (
+        {user?.role === "reception" && (
           <Route element={<Receptionist />} path="/reception">
             <Route element={<Dashboard />} path="/reception" />
             <Route element={<Staff />} path="/reception/staff" />
@@ -63,7 +53,7 @@ function App() {
             <Route element={<Messages />} path="/reception/messages" />
           </Route>
         )}
-        {loggedUser?.role === "nurse" && (
+        {user?.role === "nurse"  && (
           <Route element={<Nurse />} path="/nurse">
             <Route element={<Dashboard />} path="/nurse" />
             <Route element={<Staff />} path="/nurse/staff" />
@@ -77,7 +67,7 @@ function App() {
             <Route element={<Messages />} path="/nurse/messages" />
           </Route>
         )}
-        {loggedUser?.role === "doctor" && (
+        {user?.role === "doctor" && (
           <Route element={<Doctor />} path="/doctor">
             <Route element={<Dashboard />} path="/doctor" />
             <Route element={<Staff />} path="/doctor/staff" />
@@ -89,7 +79,7 @@ function App() {
             <Route element={<Messages />} path="/doctor/messages" />
           </Route>
         )}
-        {loggedUser?.role === "pharmacy" && (
+        {user?.role === "pharmacy" && (
           <Route element={<Pharmacy />} path="/pharmacy">
             <Route element={<Dashboard />} path="/pharmacy" />
             
@@ -99,7 +89,7 @@ function App() {
             <Route element={<Messages />} path="/pharmacy/messages" />
           </Route>
         )}
-        {loggedUser?.role === "admin" && (
+        {user?.role === "admin" && (
           <Route element={<Administration />} path="/admin">
             <Route element={<Dashboard />} path="/admin" />
             <Route element={<Users />} path="/admin/users" />

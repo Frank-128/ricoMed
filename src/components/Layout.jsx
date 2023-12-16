@@ -22,22 +22,26 @@ import {
   Timer,
 } from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu'
-import { Badge } from "@mui/material";
+import { Alert, Badge, Snackbar } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { users } from "../assets/data";
+import { removeNotification } from "../redux/notificationSlice";
 
 function Layout({ children }) {
   const [active, setActive] = useState("dashboard");
   const location = useLocation();
   var sidebar_item = location.pathname.split("/")[1];
-  const loggedUser = useSelector((state) => state.currentUser);
+  const loggedUser = useSelector((state) => state.user.currentUser);
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [toggleSearch, setToggleSearch] = useState(false);
   const [searchArray, setSearchArray] = useState([]);
   const [openSidebar,setOpenSidebar] = useState(false)
+
+  const notification = useSelector((state)=>state.notification)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     var value = location.pathname.split("/")[2];
@@ -70,9 +74,17 @@ function Layout({ children }) {
       setActive(value);
     }
   }, [location]);
-  console.log(sidebar_item == "doctor");
+  
   return (
     <div className="w-screen  flex flex-col ">
+       <Snackbar
+    anchorOrigin={{ vertical:'top', horizontal:'right' }}
+    open={notification.status} autoHideDuration={4000} onClose={()=>dispatch(removeNotification())}>
+    <Alert onClose={()=>dispatch(removeNotification())} severity={notification.type} sx={{ width: '100%' }}>
+     {notification.message}
+     
+    </Alert> 
+    </Snackbar>
       {/* Navabar for small devices */}
       <nav className="md:hidden fixed inset-0 z-50 bg-white h-16 flex flex-col">
       <div className="flex justify-between px-4 items-center">
@@ -181,7 +193,7 @@ function Layout({ children }) {
                 variant="circular"
                 alt="tania andrew"
                 className="cursor-pointer outline outline-offset-2"
-                src={loggedUser.pic}
+                src={'http://localhost:8000'+loggedUser.profile_picture}
               />
             </MenuHandler>
             <MenuList>

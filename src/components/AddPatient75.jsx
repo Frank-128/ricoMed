@@ -1,4 +1,5 @@
 import {
+  Button,
   Input,
   Option,
   Progress,
@@ -7,11 +8,39 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { ArrowBackIosNewRounded } from "@mui/icons-material";
-import React from "react";
+import Cookies from "js-cookie";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { axios } from "../axios";
+import { useDispatch } from "react-redux";
+import { createNotification } from "../redux/notificationSlice";
 
 const AddPatient75 = ({url}) => {
     const navigate = useNavigate()
+    const [paymentType,setPaymentType] = useState("insurance")
+    const {register,handleSubmit,control} = useForm()
+    const patient = Cookies.get("patient")
+    const dispatch = useDispatch()
+
+
+    const submitData = async(data)=>{
+      const patient_data = JSON.parse(patient)
+      await axios.post('patients/',{...patient_data,...data}).then((res)=>{
+        if (res.status == 201){
+
+          dispatch(createNotification({type:"success",message:"Patient created successfully"}))
+          navigate(url)
+        }else{
+          dispatch(createNotification({type:"error",message:"Error occurred when creating a patient"}))
+
+        }
+      }).catch((err)=>{
+        
+        dispatch(createNotification({type:"error",message:"Error occurred when creating a patient"}))
+      })
+    }
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <Progress value={75} color="purple" />
@@ -21,7 +50,7 @@ const AddPatient75 = ({url}) => {
     <span>Previous</span>
     </span>
     </div>
-      <form action="" className="border w-fit ">
+      <form onSubmit={handleSubmit(submitData)} className="border w-fit ">
         <div className="flex justify-center p-3">
           <span className="font-bold text-3xl">Add New Patient</span>
         </div>
@@ -31,30 +60,41 @@ const AddPatient75 = ({url}) => {
             <span className="underline font-bold">Medical Issue</span>
           </div>
           <div className="flex justify-between gap-2 px-2">
-            <Select label="Medical Issue">
-              <Option value="counselling">Counselling</Option>
-              <Option value="Medical Test">Medical Test</Option>
-              <Option value="maternal">Maternal woman </Option>
-              <Option value="radiology">Radiology </Option>
-              <Option value="general">General Doctor </Option>
-              <Option value="specialist">Specialist </Option>
-            </Select>
+            <Controller
+            name="medical_issue"
+            defaultValue={""}
+            control={control}
+            render={({field})=>(
 
-            <Select label="Choose Doctor">
-              <Option value="robert">Robert</Option>
-              <Option value="sane">Sane Brown</Option>
-              <Option value="moses">Moses Kelvin </Option>
-              <Option value="trevor">Trevor Denis </Option>
-              <Option value="frank">Frank Rico </Option>
-              <Option value="mason">Mason Campbell </Option>
+              <Select label="Medical Issue" {...field}>
+              <Option value="CL">Counselling</Option>
+              <Option value="MT">Medical Test</Option>
+              <Option value="MW">Maternal woman </Option>
+              <Option value="RD">Radiology </Option>
+              <Option value="GD">General Doctor </Option>
+              <Option value="SL">Specialist </Option>
             </Select>
+              )}
+              />
+             <Controller
+            name="assigned_doctor"
+            defaultValue={""}
+            control={control}
+            render={({field})=>(
+
+            <Select label="Choose Doctor" {...field}>
+              <Option value="7">Robert</Option>
+              <Option value="8">Sane Brown</Option>
+              
+            </Select>)}
+            />
           </div>
           <div className="flex flex-col  p-2">
             <Typography className="text-sm mx-2">Patient Type</Typography>
 
             <div className="flex text-sm">
-              <Radio value="inpatient" name="patient" label="Inpatient" />
-              <Radio value="outpatient" name="patient" label="Outpatient" />
+              <Radio value={true} name="patient" label="Inpatient" {...register('is_inpatient_type')} />
+              <Radio value={false} name="patient" label="Outpatient" {...register('is_inpatient_type')} />
             </div>
           </div>
         </div>
@@ -66,32 +106,67 @@ const AddPatient75 = ({url}) => {
           </div>
           <div className="flex justify-between gap-2 p-3">
             <div className="flex flex-col gap-y-2 items-start justify-start">
-             <Radio name="payment" label="Insurance" />
-
-              <Input label="Insurance Number" />
+             <Radio name="payment" label="Insurance" value={"IN"} {...register('payment_method')} defaultChecked onClick={()=>setPaymentType("insurance")} />
+           
             </div>
             <div className="flex flex-col gap-y-2 items-start justify-center">
-              <Radio name="payment" label="Pay By Card" />
+              <Radio name="payment" value={"CD"} label="Pay By Card" {...register('payment_method')} onClick={()=>setPaymentType("card")} />
 
-              <Select label="Payment Method" name="" id="card">
-                <Option value="visa">VISA</Option>
-                <Option value="mastercard">MASTERCARD</Option>
-                <Option value="paypal">PAYPAL </Option>
-                <Option value="skrill">SKRILL </Option>
-              </Select>
-              <Input label="Card Number" className="p-2" />
+          
             </div>
             <div className="flex flex-col gap-y-2  items-start justify-start">
-             <Radio name="payment" label="Others" />
+             <Radio name="payment" value={"OT"} label="Others" {...register('payment_method')} onClick={()=>setPaymentType("others")} />
 
-              <Input label="Others..."/>
+             
             </div>
+          </div>
+          <div className="px-5 space-y-4">
+          { paymentType == "insurance" && <>
+            <Controller
+            name="insurance_company"
+            defaultValue={""}
+            control={control}
+            render={({field})=>(
+
+              <Select label="Insurance Company" {...field}>
+                <Option value="N">NHIF</Option>
+                <Option value="A">AAR</Option>
+                <Option value="J">JUBILEE </Option>
+              </Select>
+              )}
+              />
+              <Input label="Insurance Number" {...register('insurance_no')} defaultValue={null} />
+            </>}
+ { paymentType == "card" && <>
+          <Controller
+            name="card_type"
+            defaultValue={""}
+            control={control}
+            render={({field})=>(
+
+             <Select label="Payment Method" {...field}>
+                <Option value="V">VISA</Option>
+                <Option value="M">MASTERCARD</Option>
+                <Option value="P">PAYPAL </Option>
+                <Option value="S">SKRILL </Option>
+              </Select>
+            )}
+            />
+              <Input label="Card Number" {...register('card_no')}  type="number" className="p-2" />
+             
+             </>}
+             {
+              paymentType=="others" &&
+              <Input label="Others description" {...register('others_description')} className="p-2" />
+
+             }
+
           </div>
         </div>
         <div className="flex justify-center py-4 px-2">
-          <Link to={url+'/profile/2'} className="bg-purple-500 p-2 text-center rounded-sm text-gray-200 w-full ">
+          <Button type="submit" className="bg-purple-500 p-2 text-center rounded-sm text-gray-200 w-full ">
             ADD PATIENT
-          </Link>
+          </Button>
         </div>
       </form>
     </div>

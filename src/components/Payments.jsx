@@ -9,7 +9,7 @@ function Payments() {
   const [total,setTotal] = useState(0)
   const [bill,setBill] = useState([]);
   const [generateBill,setGenerateBill]= useState(false)
-  const user = useSelector((state)=>state.currentUser);
+  const user = useSelector((state)=>state.user.currentUser);
   useEffect(()=>{
     var valueZ = patients.find((obj)=>obj.name === patient);
    setBill(valueZ?.bill);

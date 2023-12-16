@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -10,10 +10,24 @@ import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 function Home() {
   const [open, setOpen] = useState(false);
   const [serviceMessage,setServiceMessage] = useState({})
+  // useEffect(()=>{
+  //  const socket = new WebSocket('ws://127.0.0.1:8000/chat/')
+  
+  //   socket.onopen = ()=>{
+  //     console.log('websocket connection open')
+  //   }
+  //    socket.onmessage = (e)=>{
+  //     console.log('websocket incoming messages from the server',e.data)
+  //   }
+  //   return ()=>{
+  //     socket.close()
+  //   }
+  // },[])
+  
 
   return (
     <div className="flex flex-col ">
-      <nav className="flex fixed h-16 border-b-[1px]  z-50 top-0 left-0 right-0 h-16 w-full md:px-10 px-1 bg-white items-center  justify-between">
+      <nav className="flex fixed  border-b-[1px]  z-50 top-0 left-0 right-0 h-16 w-full md:px-10 px-1 bg-white items-center  justify-between">
         <div className="flex gap-2">
           <img src="/ricoMed.jpg" className="w-10 h-10 rounded" alt="" />
         </div>

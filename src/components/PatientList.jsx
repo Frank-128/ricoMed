@@ -1,12 +1,28 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import { Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
-import { patients } from '../assets/data'
+// import { patients } from '../assets/data'
 import { Link, Navigate, Route, Routes, useNavigate, useResolvedPath } from 'react-router-dom'
+import { axios } from "../axios";
+import { useDispatch } from "react-redux";
+import { createNotification } from "../redux/notificationSlice";
 
 
 const PatientList = () => {
     const [type,setType] = useState("all")
+    const [patients,setPatients] = useState([])
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+  useEffect(()=>{
+
+    axios.get('patients/').then((res)=>{
+      setPatients(res.data)
+    }).catch((err)=>{
+      dispatch(createNotification({type:"error",message:"Sorry, Network error occurred we will be back to you soon!!"}))
+    })
+
+  },[])
+
   return (
     <>
       <div className="flex-1 justify-center flex  ">
@@ -50,7 +66,6 @@ const PatientList = () => {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell>Id</TableCell>
               <TableCell>Doctor</TableCell>
               <TableCell>Type</TableCell>
               <TableCell>Status</TableCell>
@@ -60,20 +75,18 @@ const PatientList = () => {
             {patients
               .filter(
                 (item) =>
-                  item.type === type || type === "all" || item.status === type
+                  (item.is_inpatient_type && type=="inpatient" ) || (!item.is_inpatient_type && type=="outpatient")  || type === "all" || item.status === type
               )
               .map((item, i) => (
                 <TableRow key={i}>
                   <TableCell>
                     <Link to={`profile/${item.id}`} className="text-blue-800">
-                      {item.name}
+                      {item.firstname}{" "+item.lastname}
                     </Link>
                   </TableCell>
-                  <TableCell onClick={() => navigate(`${url}/add/25`)}>
-                    {item.id}
-                  </TableCell>
-                  <TableCell>{item.doctor}</TableCell>
-                  <TableCell>{item.type}</TableCell>
+                 
+                  <TableCell>{item.assigned_doctor}</TableCell>
+                  <TableCell>{item.is_inpatient_type   ? "Inpatient":"Outpatient"}</TableCell>
                   <TableCell>{item.status}</TableCell>
                 </TableRow>
               ))}

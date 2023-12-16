@@ -1,42 +1,84 @@
+import { Button,Dialog, DialogBody, Input, Option, Select } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { axios } from "../axios";
+import { useDispatch, useSelector } from "react-redux";
+import { createNotification } from "../redux/notificationSlice";
+import { Controller, useForm } from "react-hook-form";
 
-import { Button } from '@mui/material'
-import React from 'react'
+function PatientBill({ setPatientBill, pat, patientBill }) {
+        const [services,setServices] = useState([])
+        const dispatch = useDispatch()
+        const {register,handleSubmit,control} = useForm()
+        const loggedUser = useSelector((state)=>state.user.currentUser)
 
-function PatientBill({setPatientBill,name}) {
-    const handleClick = (e)=>{
-        
-        console.log(e.target.classList.contains("modal"))
-        if(e.target.classList.contains("modal")){
-            setPatientBill(false);
+    const submitData = (data)=>{
+      axios.post('bills/',{...data,patient:pat?.id,service_provider:loggedUser.id}).then((res)=>{
+        if (res.status == 201){
+          dispatch(createNotification({type:"success",message:"Service billed to the patient successfully"}))
+ 
         }
-    }
-  return (
-    <div onClick={handleClick} className='bg-slate-900/80 absolute top-0 modal left-0 w-full h-full flex items-center justify-center '>
-        <form className='w-1/3 rounded h-1/4 flex gap-4 flex-col bg-slate-300'>
-            <div className='p-2 flex justify-center'><b className='mr-1'>{name}'s </b> <span> Services</span></div>
-            <div className='flex gap-2 justify-center items-center'>
-            <label htmlFor='department'>Choose  department</label>
-            <select className='p-2'>
-                <option>General Doctor</option>
-                <option>Specialist Doctor</option>
-                <option>Diagnostic Imaging</option>
-                <option>Operation Room</option>
-                <option>Radiology</option>
-                <option>Laboratory </option>
-                <option>Pharmarcy</option>
-                <option>ICU</option>
-            </select>
+        else{
+          dispatch(createNotification({type:"error",message:"Service billing failed please try again later"}))
 
+        }
+        setPatientBill(false)
+      }).catch((err)=>{
+        dispatch(createNotification({type:"error",message:"Network error please try again later"}))
+        setPatientBill(false)
+      })
+    }
+
+
+    useEffect(()=>{
+        axios.get('bills/service').then((res)=>{
+          console.log(res.data)
+          if(res.status == 200){
+             setServices(res.data)
+           }
+           else{
+            dispatch(createNotification({type:"error",message:"Network error please try again later"}))
+
+           }
+        })
+    },[])
+  return (
+    <Dialog
+      open={patientBill}
+      handler={() => setPatientBill(false)}
+      size="sm"
+     
+    >
+      <DialogBody>
+        <div
+          className=" w-full h-full flex items-center justify-center "
+        >
+          <form onSubmit={handleSubmit(submitData)} className="w-full h-full flex gap-4 flex-col">
+            <div className="p-2 flex justify-center">
+              <b className="mr-1">{pat?.firstname}'s </b> <span> Services</span>
             </div>
-            <div className='flex gap-3 justify-center'>
-                <label htmlFor="service">Service</label>
-                <textarea className='p-2 w-1/3' type="text" placeholder='service provided' />
-            </div>
-            <Button>add service</Button>
-        </form>
-        
-    </div>
-  )
+
+           <Controller
+            control={control}
+            name="service"
+            render ={ (({field})=>
+            <Select label="Choose Service" {...field} className="p-2">
+              {
+                services?.map(({id,service_name},index)=>(
+
+                  <Option key={index} value={id}>{service_name}</Option>
+                ))
+              }
+            </Select>
+            )}
+            />
+            <Input  {...register('description')} label="Description" />
+
+            <Button type="submit">add service</Button>
+          </form>
+        </div>
+      </DialogBody>
+    </Dialog>
+  );
 }
 
-export default PatientBill
+export default PatientBill;
