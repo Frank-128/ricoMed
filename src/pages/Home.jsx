@@ -10,19 +10,8 @@ import { Facebook, Instagram, Twitter } from "@mui/icons-material";
 function Home() {
   const [open, setOpen] = useState(false);
   const [serviceMessage,setServiceMessage] = useState({})
-  // useEffect(()=>{
-  //  const socket = new WebSocket('ws://127.0.0.1:8000/chat/')
   
-  //   socket.onopen = ()=>{
-  //     console.log('websocket connection open')
-  //   }
-  //    socket.onmessage = (e)=>{
-  //     console.log('websocket incoming messages from the server',e.data)
-  //   }
-  //   return ()=>{
-  //     socket.close()
-  //   }
-  // },[])
+  
   
 
   return (

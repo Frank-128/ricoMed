@@ -46,7 +46,7 @@ function GroupHead({ group,handleClick,setChatPerson }) {
 }
 
 function Messages() {
-  const id = useSelector((state) => state.currentUser.id);
+ 
   const [receiverId, setReceiverId] = useState();
   const [chatPerson,setChatPerson] = useState('');
   const [chatType,setChatType]= useState(false);
@@ -97,7 +97,7 @@ function Messages() {
     })
   }
 
-  console.log(`private-chat-${Math.min(id, receiverId)}-${Math.max(id, receiverId)}`)
+  
 
   useEffect(()=>{
     (
@@ -118,48 +118,28 @@ function Messages() {
   },[])
 const token = Cookies.get("authenticatedUser")
 const access = JSON.parse(token).access
-console.log(access)
-
 
 useEffect(()=>{
-  const socket = new WebSocket(`ws://localhost:8000/ws/user_presence/?token=${access}`);
+  const socket = new WebSocket(`ws://localhost:8000/chat/?token=${access}`)
 
-  socket.onopen = () => {
-    console.log('WebSocket connection open');
-    // socket.send(JSON.stringify({ type: 'subscribe' }));
-    socket.send(JSON.stringify({type:'join'}))
-  };
+  socket.onopen=()=>{
+    console.log("connection open in the frontend")
+  }
 
-  // Handle received messages
-  socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-   
-    if (data.type === 'update_online_users') {
-      setOnlineUsers(data.online_users);
-      console.log("new data",data.online_users)
-    }
-    else {
-      console.log(data)
-    }
-  };
 
-  // Handle connection closed
-  socket.onclose = () => {
-    console.log('WebSocket closed');
-    // socket.send(JSON.stringify({'type':'disconnect'}))
-  };
 
-  // Clean up on component unmount
-  return () => {
-    socket.close();
-  };
+  socket.onclose = ()=>{
+    console.log("connectiokn closed in the backend")
+  }
 
-    
-
-},[access])
-
-console.log(onlineUsers)
-
+  socket.onerror = ()=>{
+    console.log("Error connecting the socket")
+  }
+ 
+  return ()=>{
+    socket.close()
+  }
+},[])
   return (
     <div className="overflow-y-scroll w-full   flex h-full">
       <div className="bg-gray-100   w-full md:basis-2/6">
@@ -172,7 +152,7 @@ console.log(onlineUsers)
             <GroupHead group={item} handleClick={handleClick} setChatPerson={setChatPerson} />
           ))
           :users
-            .filter((item) => item.id !== id)
+            .filter((item) => item.id !== 1)
             .map((item) => (
               <ChatHead user={item} handleClick={handleClick} setChatPerson={setChatPerson} />
             ))} 
@@ -183,8 +163,8 @@ console.log(onlineUsers)
         { !chatType?conversations
           .filter(
             (item) =>
-              (item.sender === id && item.receiver === receiverId) ||
-              (item.receiver === id && item.sender === receiverId) 
+              (item.sender === 1 && item.receiver === receiverId) ||
+              (item.receiver === 1 && item.sender === receiverId) 
           )
           .map((item) => (
             <div

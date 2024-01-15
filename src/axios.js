@@ -7,17 +7,7 @@ export const axios = Axios.create({
     timeout:30000,
 })
 
-axios.interceptors.request.use(
-    (config)=>{
-        // const token = JSON.parse(Cookies.get('authenticatedUser')).access;
-        const token = localStorage.getItem("access")
-        if(token){
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-            },
-            (error)=>Promise.reject(error)
-            )
+
 axios.interceptors.response.use(
     (response) => response,
     async(error) => {
