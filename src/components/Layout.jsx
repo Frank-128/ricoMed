@@ -28,6 +28,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { users } from "../assets/data";
 import { removeNotification } from "../redux/notificationSlice";
+import Cookies from "js-cookie";
+import { setUsers } from "../redux/userSlice";
+
 
 function Layout({ children }) {
   const [active, setActive] = useState("dashboard");
@@ -42,6 +45,8 @@ function Layout({ children }) {
 
   const notification = useSelector((state)=>state.notification)
   const dispatch = useDispatch()
+  const token = Cookies.get("authenticatedUser");
+  const access = JSON.parse(token).access;
 
   useEffect(() => {
     var value = location.pathname.split("/")[2];
@@ -75,6 +80,50 @@ function Layout({ children }) {
     }
   }, [location]);
   
+  useEffect(() => {
+    const socket = new WebSocket(`ws://localhost:8000/chat/?token=${access}`);
+
+    socket.onopen = () => {
+      socket.send(
+        JSON.stringify({
+          source: "users.list",
+         
+        })
+      );
+      socket.send(
+        JSON.stringify({
+          source: "online_users",
+         
+        })
+      );
+      console.log("connection opened")
+    };
+
+    socket.onmessage = (e) => {
+      const response = JSON.parse(e.data);
+      console.log(response)
+      if (response.source == 'users.list'){
+          dispatch(setUsers(response.data))
+      }
+    };
+
+    socket.onclose = () => {
+     
+      console.log("connection closed in the backend");
+    };
+
+    socket.onerror = () => {
+      dispatch(setUsers("error"))
+      console.log("Error connecting the socket");
+    };
+
+    return () => {
+     socket.close()
+    };
+  }, []);
+
+
+
   return (
     <div className="w-screen  flex flex-col ">
        <Snackbar

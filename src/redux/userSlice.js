@@ -21,8 +21,10 @@ const userSlice= createSlice({
     name:'user',
     initialState:{
         currentUser:checkAndFetchUser(),
+        users:null,
         isLoading:'',
-        error:false
+        error:false,
+
 
     },
     reducers:{
@@ -36,13 +38,9 @@ const userSlice= createSlice({
                 
                  navigate(`/${state.currentUser.role}`)
                  
-                Swal.fire({
-                    icon:'success',
-                    title:state.currentUser.username,
-                    text:'Login successfully!',
-                    timer:1500
-                })
            
+        },setUsers:(state,action)=>{
+            state.users = action.payload
         },
         setIsLoading:(state,action)=>{
             state.isLoading = action.payload
@@ -59,5 +57,5 @@ const userSlice= createSlice({
     }
 })
 
-export const{setCurrentUser,setIsLoading,setError} = userSlice.actions;
+export const{setCurrentUser,setIsLoading,setError,setUsers} = userSlice.actions;
 export default userSlice.reducer

@@ -26,13 +26,11 @@ import moment from "moment";
 function Users() {
   const [openForm, setOpenForm] = useState(false);
   const [type, setType] = useState(1);
-  const [users, setUsers] = useState(null);
   const [openAccordion, setAccordion] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const token = Cookies.get("authenticatedUser");
-  const access = JSON.parse(token).access;
-  const user = useSelector((state)=>state.user.currentUser)
+ 
+  const users = useSelector((state)=>state.user.users)
   const { register, handleSubmit } = useForm();
 
   const handleSubmitDepartment = async (data) => {
@@ -51,7 +49,9 @@ function Users() {
   };
 
   const formatDate = (rawDate)=>{
-    console.log(moment(rawDate).format('MMMM Do YYYY, h:mm:ss a'))
+    if( rawDate === null){
+      return '---|---'
+    }
     return moment(rawDate).format('MMMM Do YYYY, h:mm:ss a')
   }
 
@@ -68,47 +68,7 @@ function Users() {
   //   })();
   // }, []);
 
-  useEffect(() => {
-    const socket = new WebSocket(`ws://localhost:8000/chat/?token=${access}`);
-
-    socket.onopen = () => {
-      socket.send(
-        JSON.stringify({
-          source: "users.list",
-          username:user.username
-        })
-      );
-      socket.send(
-        JSON.stringify({
-          source: "online_users",
-          username:user.username
-        })
-      );
-      console.log("connection opened")
-    };
-
-    socket.onmessage = (e) => {
-      const response = JSON.parse(e.data);
-      console.log(response)
-      if (response.source == 'users.list'){
-          setUsers(response.data)
-      }
-    };
-
-    socket.onclose = () => {
-     
-      console.log("connection closed in the backend");
-    };
-
-    socket.onerror = () => {
-      setUsers("error")
-      console.log("Error connecting the socket");
-    };
-
-    return () => {
-     socket.close()
-    };
-  }, []);
+ 
 
 
   
@@ -147,7 +107,7 @@ function Users() {
             <TableCell>Department</TableCell>
             <TableCell>Role</TableCell>
             <TableCell>Status</TableCell>
-            <TableCell>Created At</TableCell>
+            <TableCell>Last login</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -181,7 +141,7 @@ function Users() {
                   </span>
                 )}
               </TableCell>
-              <TableCell>{formatDate(item?.created_at)}</TableCell>
+              <TableCell>{formatDate(item?.last_login)}</TableCell>
             </TableRow>
           ))}
         </TableBody>
